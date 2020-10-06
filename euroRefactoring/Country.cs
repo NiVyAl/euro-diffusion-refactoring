@@ -9,10 +9,11 @@ namespace euroRefactoring
 
 		public Country()
 		{
+
 		}
 
-		void Parse(string contryDefinition) {
-
+		public void Parse(string contryDefinition) {
+			Console.WriteLine(contryDefinition);
 		}
 	}
 }
