@@ -9,7 +9,13 @@ namespace euroRefactoring
 		int[] Portion;
 		bool IsComplete;
 
-		public City()
+		private int _numberOfCountry;
+		private int _countUncompleteCountries;
+		private int _countryIndex;
+		private const int _initiallyCountCoins = 1000000;
+		private const double _portionCoins = 0.001;
+
+		public City(int X, int Y, int countryNumber)
 		{
 
 		}

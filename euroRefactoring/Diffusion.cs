@@ -23,19 +23,24 @@ namespace euroRefactoring
 					string line;
 					while ((line = sr.ReadLine()) != null)
 					{
+						/* получаю количество стран */
 						bool isCanParse = ParseNumberOfCountry(line);
 						if (!isCanParse)
 							break;
+						/* */
 
+						/* инициализирую каждую страну */
 						_countries = new Country[_numberOfCountry];
 						for (int i = 0; i < _numberOfCountry; i++)
 						{
-							_countries[i] = new Country();
+							_countries[i] = new Country(_caseNumber, i);
 							_countries[i].Parse(sr.ReadLine()); // читаем строку и сразу ее передаем на парсинг
 						}
+						/* */
 
 						if (_numberOfCountry > 1) // calculation starts if the number of countries is > 1 (if only 1 country, it complete in 0 days)
 							Calculate();
+
 						PrintOutput();
 						_caseNumber++;
 					}
