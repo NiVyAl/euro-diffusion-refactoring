@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace euroRefactoring
 {
-	public partial class Diffusion
+	public class Diffusion
 	{
 		Country[] _countries;
 		bool _IsComplete;
 
-		private int _numberOfCountry; // number of countries in each case
-		private int _caseNumber = 1;
+		public static int NumberOfCountry; // number of countries in each case
+		public static int CaseNumber = 1;
+
+		public static List<City> Cities = new List<City>(); // сдесь все города
 
 		public void Parse(string filename)
 		{
@@ -23,6 +25,7 @@ namespace euroRefactoring
 					string line;
 					while ((line = sr.ReadLine()) != null)
 					{
+						Cities.Clear();
 						/* получаю количество стран */
 						bool isCanParse = ParseNumberOfCountry(line);
 						if (!isCanParse)
@@ -30,19 +33,19 @@ namespace euroRefactoring
 						/* */
 
 						/* инициализирую каждую страну */
-						_countries = new Country[_numberOfCountry];
-						for (int i = 0; i < _numberOfCountry; i++)
+						_countries = new Country[NumberOfCountry];
+						for (int i = 0; i < NumberOfCountry; i++)
 						{
-							_countries[i] = new Country(_caseNumber, i);
+							_countries[i] = new Country(i);
 							_countries[i].Parse(sr.ReadLine()); // читаем строку и сразу ее передаем на парсинг
 						}
 						/* */
 
-						if (_numberOfCountry > 1) // calculation starts if the number of countries is > 1 (if only 1 country, it complete in 0 days)
+						if (NumberOfCountry > 1) // calculation starts if the number of countries is > 1 (if only 1 country, it complete in 0 days)
 							Calculate();
 
 						PrintOutput();
-						_caseNumber++;
+						CaseNumber++;
 					}
 				}
 			}
@@ -54,12 +57,50 @@ namespace euroRefactoring
 
 		void Calculate()
 		{
+			/* определяем соседей каждого города */
+			for (int i = 0; i < Cities.Count; i++)
+			{
+				for (int j = 1; j < Cities.Count; j++)
+				{
+					if ((Cities[i].x == Cities[j].x + 1) || (Cities[i].x == Cities[j].x - 1) || (Cities[i].y == Cities[j].y + 1) || (Cities[i].y == Cities[j].y - 1) && (!Cities[i].Neighbors.Contains(Cities[j])))
+					{
+						Cities[i].Neighbors.Add(Cities[j]);
+						Cities[j].Neighbors.Add(Cities[i]);
+					}
+				}
+			}
+			/* */
 
+			int days = 1;
+			int numberUncompleteCountries = NumberOfCountry;
+
+			while (numberUncompleteCountries > 0)
+			{
+				for (int i = 0; i < NumberOfCountry; i++)
+				{
+					//if (_countries[i].dayPassed())
+					//{
+
+					//}
+
+				}
+			}
 		}
 
 		void PrintOutput()
 		{
+			Console.WriteLine($"Case Number {CaseNumber}");
 
+			var q =
+				from t in _countries
+				orderby t
+				select t;
+
+			var result = q.ToList();
+			foreach (Country i in result)
+			{
+				Console.WriteLine($"	{i.CountryName}: {i.Days}");
+			}
 		}
 
 
@@ -67,16 +108,16 @@ namespace euroRefactoring
 
 		bool ParseNumberOfCountry(string line)
 		{
-			_numberOfCountry = 0;
+			NumberOfCountry = 0;
 
 			/* parse number of country */
-			bool isCanParse = int.TryParse(line, out _numberOfCountry);
+			bool isCanParse = int.TryParse(line, out NumberOfCountry);
 			if (!isCanParse)
 			{
 				Console.WriteLine("Can't parse number of country");
 				return false;
 			}
-			if (_numberOfCountry == 0)
+			if (NumberOfCountry == 0)
 				return false;
 			return true;
 			/* */

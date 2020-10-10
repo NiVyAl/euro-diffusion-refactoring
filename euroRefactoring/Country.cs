@@ -1,23 +1,23 @@
 using System;
+using System.Collections.Generic;
 namespace euroRefactoring
 {
 	public class Country : IComparable
 	{
-		City[] cities;
+		//City[] cities;
+		public List<City> сities = new List<City>(); // сдесь все города
 		string Name;
 		bool IsComplete;
-		int _caseNumber;
-		int _countryNumber;
 
 		public string CountryName { get; set; }
 		public int Days { get; set; }
 
+		int countryIndex;
 
-
-		public Country(int caseNumber, int countryNumber)
+		public Country(int countryIndex)
 		{
-			_caseNumber = caseNumber;
-			_countryNumber = countryNumber;
+			Days = 0;
+			this.countryIndex = countryIndex;
 		}
 
 		public void Parse(string contryDefinition) {
@@ -26,20 +26,27 @@ namespace euroRefactoring
 			int[] coordinates = returnCoordinates(contryDefinition); // может заменить на x1 y1 x2 y2 ??????
 			int xLength = Math.Abs(coordinates[2] - coordinates[0]) + 1; // Может убрать +1 ??????
 			int yLength = Math.Abs(coordinates[3] - coordinates[1]) + 1; //
-			City[] cities = new City[xLength * yLength];
+
 			for (int i = 0; i < xLength; i++)
 			{
 				for (int j = 0; j < yLength; j++)
 				{
 					//coordinates[0] + i; //X
 					//coordinates[1] + j; //Y
-					cities[i + j] = new City(coordinates[0] + i, coordinates[1] + j, _countryNumber);
+					Diffusion.Cities.Add(new City(x: coordinates[0] + i, y: coordinates[1] + j, countryIndex));
+					сities.Add(Diffusion.Cities[Diffusion.Cities.Count - 1]);
 				}
 			}
 		}
 
 
 		/* мои функции */
+		public void writeAboutYou()
+		{
+			Console.WriteLine($"Name: {CountryName}, Index: {countryIndex}");
+			// ПРОБЛЕМА!!! СТРАНА НЕ ЗНАЕТ КТО ЕЕ ГОРОДА
+		}
+
 		public int CompareTo(object obj)
 		{
 			int res;
@@ -61,7 +68,7 @@ namespace euroRefactoring
 		{
 			string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 			if (words[0] == " ") //		!!! переделать проверку!!!								!!! переделать проверку!!!
-				throw new Exception($"Can't parse country name, case number: {_caseNumber}, country number: {_countryNumber}");
+				throw new Exception($"Can't parse country name, case number: {Diffusion.CaseNumber}, country number: {countryIndex}");
 			return words[0];
 		}
 
@@ -74,7 +81,7 @@ namespace euroRefactoring
 			{
 				if (int.TryParse(words[i], out coordinates[i - 1]) == false)
 				{
-					throw new Exception($"Can't parse coordinates, case number: {_caseNumber}, country name: {CountryName}");
+					throw new Exception($"Can't parse coordinates, case number: {Diffusion.CaseNumber}, country name: {CountryName}");
 				}
 			}
 
