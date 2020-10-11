@@ -5,18 +5,18 @@ namespace euroRefactoring
 	public class Country : IComparable
 	{
 		//City[] cities;
-		public List<City> сities = new List<City>(); // сдесь все города
+		public List<int> сities = new List<int>(); // сдесь все города
 		string Name;
-		bool IsComplete;
+		public bool IsComplete { get; set; }
 
 		public string CountryName { get; set; }
 		public int Days { get; set; }
 
 		int countryIndex;
+		int numberUncompleteCities;
 
 		public Country(int countryIndex)
 		{
-			Days = 0;
 			this.countryIndex = countryIndex;
 		}
 
@@ -34,17 +34,28 @@ namespace euroRefactoring
 					//coordinates[0] + i; //X
 					//coordinates[1] + j; //Y
 					Diffusion.Cities.Add(new City(x: coordinates[0] + i, y: coordinates[1] + j, countryIndex));
-					сities.Add(Diffusion.Cities[Diffusion.Cities.Count - 1]);
+					сities.Add(Diffusion.Cities.Count - 1);
 				}
 			}
+			numberUncompleteCities = сities.Count;
 		}
 
 
 		/* мои функции */
-		public void writeAboutYou()
+		public void CheckIsComplete()
 		{
-			Console.WriteLine($"Name: {CountryName}, Index: {countryIndex}");
-			// ПРОБЛЕМА!!! СТРАНА НЕ ЗНАЕТ КТО ЕЕ ГОРОДА
+			for (int i = 0; i < сities.Count; i++)
+			{
+				if (Diffusion.Cities[i].IsComplete)
+				{
+					IsComplete = true;
+				} else
+				{
+					IsComplete = false;
+					break;
+				}
+					
+			}
 		}
 
 		public int CompareTo(object obj)

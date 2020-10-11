@@ -62,10 +62,13 @@ namespace euroRefactoring
 			{
 				for (int j = 1; j < Cities.Count; j++)
 				{
-					if ((Cities[i].x == Cities[j].x + 1) || (Cities[i].x == Cities[j].x - 1) || (Cities[i].y == Cities[j].y + 1) || (Cities[i].y == Cities[j].y - 1) && (!Cities[i].Neighbors.Contains(Cities[j])))
+					if (!Cities[i].Neighbors.Contains(Cities[j]))
 					{
-						Cities[i].Neighbors.Add(Cities[j]);
-						Cities[j].Neighbors.Add(Cities[i]);
+						if ((Cities[i].x == Cities[j].x + 1) || (Cities[i].x == Cities[j].x - 1) || (Cities[i].y == Cities[j].y + 1) || (Cities[i].y == Cities[j].y - 1) )
+						{
+							Cities[i].Neighbors.Add(Cities[j]);
+							Cities[j].Neighbors.Add(Cities[i]);
+						}
 					}
 				}
 			}
@@ -76,13 +79,22 @@ namespace euroRefactoring
 
 			while (numberUncompleteCountries > 0)
 			{
+				for (int i = 0; i < Cities.Count; i++)
+				{
+					Cities[i].DayPassed();
+				}
+
 				for (int i = 0; i < NumberOfCountry; i++)
 				{
-					//if (_countries[i].dayPassed())
-					//{
-
-					//}
-
+					if (!_countries[i].IsComplete)
+					{
+						_countries[i].CheckIsComplete();
+						if (_countries[i].IsComplete)
+						{
+							_countries[i].Days = days;
+							numberUncompleteCountries--;
+						}
+					}
 				}
 			}
 		}
