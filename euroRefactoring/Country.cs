@@ -46,7 +46,7 @@ namespace euroRefactoring
 		{
 			for (int i = 0; i < сities.Count; i++)
 			{
-				if (Diffusion.Cities[i].IsComplete)
+				if (Diffusion.Cities[сities[i]].IsComplete)
 				{
 					IsComplete = true;
 				} else

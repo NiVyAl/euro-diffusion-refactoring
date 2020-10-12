@@ -22,6 +22,10 @@ namespace euroRefactoring
 			{
 				using (StreamReader sr = new StreamReader(filename, System.Text.Encoding.Default))
 				{
+					Console.WriteLine();
+					Console.WriteLine();
+					Console.WriteLine();
+					Console.WriteLine("Start............");
 					string line;
 					while ((line = sr.ReadLine()) != null)
 					{
@@ -64,7 +68,11 @@ namespace euroRefactoring
 				{
 					if (!Cities[i].Neighbors.Contains(Cities[j]))
 					{
-						if ((Cities[i].x == Cities[j].x + 1) || (Cities[i].x == Cities[j].x - 1) || (Cities[i].y == Cities[j].y + 1) || (Cities[i].y == Cities[j].y - 1) )
+						if (((Cities[i].x == Cities[j].x + 1) || (Cities[i].x == Cities[j].x - 1)) && (Cities[i].y == Cities[j].y)) {
+							Cities[i].Neighbors.Add(Cities[j]);
+							Cities[j].Neighbors.Add(Cities[i]);
+						}
+						if (((Cities[i].y == Cities[j].y + 1) || (Cities[i].y == Cities[j].y - 1)) && (Cities[i].x == Cities[j].x))
 						{
 							Cities[i].Neighbors.Add(Cities[j]);
 							Cities[j].Neighbors.Add(Cities[i]);
@@ -79,6 +87,10 @@ namespace euroRefactoring
 
 			while (numberUncompleteCountries > 0)
 			{
+				for (int i = 0; i < Cities.Count; i++)
+				{
+					Cities[i].CalculatePortion();
+				}
 				for (int i = 0; i < Cities.Count; i++)
 				{
 					Cities[i].DayPassed();
@@ -96,6 +108,7 @@ namespace euroRefactoring
 						}
 					}
 				}
+				days++;
 			}
 		}
 
