@@ -52,8 +52,6 @@ namespace euroRefactoring
 			for (int i = 0; i < Diffusion.NumberOfCountry; i++)
 			{
 				Portion[i] = (int)(Balance[i] * _portionCoins);
-				//if (Balance[i] > 0)
-				//	Console.WriteLine(Balance[i]);
 			}
 		}
 

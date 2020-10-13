@@ -4,8 +4,7 @@ namespace euroRefactoring
 {
 	public class Country : IComparable
 	{
-		//City[] cities;
-		public List<int> сities = new List<int>(); // сдесь все города
+		List<int> сities = new List<int>(); // сдесь индексы городов принадлежащих стране
 		string Name;
 		public bool IsComplete { get; set; }
 
@@ -14,25 +13,23 @@ namespace euroRefactoring
 
 		int countryIndex;
 		int numberUncompleteCities;
+		int lineNumber;
 
-		public Country(int countryIndex)
+		public Country(int countryIndex, int lineNumber)
 		{
 			this.countryIndex = countryIndex;
+			this.lineNumber = lineNumber;
 		}
 
 		public void Parse(string contryDefinition) {
-			CountryName = returnCountry(contryDefinition);
-
 			int[] coordinates = returnCoordinates(contryDefinition); // может заменить на x1 y1 x2 y2 ??????
-			int xLength = Math.Abs(coordinates[2] - coordinates[0]) + 1; // Может убрать +1 ??????
-			int yLength = Math.Abs(coordinates[3] - coordinates[1]) + 1; //
+			int xLength = Math.Abs(coordinates[2] - coordinates[0]);
+			int yLength = Math.Abs(coordinates[3] - coordinates[1]);
 
-			for (int i = 0; i < xLength; i++)
+			for (int i = 0; i <= xLength; i++)
 			{
-				for (int j = 0; j < yLength; j++)
+				for (int j = 0; j <= yLength; j++)
 				{
-					//coordinates[0] + i; //X
-					//coordinates[1] + j; //Y
 					Diffusion.Cities.Add(new City(x: coordinates[0] + i, y: coordinates[1] + j, countryIndex));
 					сities.Add(Diffusion.Cities.Count - 1);
 				}
@@ -75,24 +72,20 @@ namespace euroRefactoring
 
 		}
 
-		private string returnCountry(string line)
-		{
-			string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-			if (words[0] == " ") //		!!! переделать проверку!!!								!!! переделать проверку!!!
-				throw new Exception($"Can't parse country name, case number: {Diffusion.CaseNumber}, country number: {countryIndex}");
-			return words[0];
-		}
-
 		private int[] returnCoordinates(string line)
 		{
 			int coordinatesCount = 4;
 			string[] words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+			if (words.Length != 5)
+				throw new Exception($"Сountry entered incorrectly, case number: {Diffusion.CaseNumber}, line: {lineNumber}");
+
+			CountryName = words[0].Replace("\t", String.Empty);
 			int[] coordinates = new int[coordinatesCount];
 			for (int i = 1; i <= coordinatesCount; i++)
 			{
 				if (int.TryParse(words[i], out coordinates[i - 1]) == false)
 				{
-					throw new Exception($"Can't parse coordinates, case number: {Diffusion.CaseNumber}, country name: {CountryName}");
+					throw new Exception($"Can't parse coordinates, case number: {Diffusion.CaseNumber}, country name: {CountryName}, line: {lineNumber}");
 				}
 			}
 

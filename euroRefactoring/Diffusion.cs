@@ -27,12 +27,12 @@ namespace euroRefactoring
 					Console.WriteLine();
 					Console.WriteLine("Start............");
 					string line;
+					int lineNumber = 1;
 					while ((line = sr.ReadLine()) != null)
 					{
 						Cities.Clear();
 						/* получаю количество стран */
-						bool isCanParse = ParseNumberOfCountry(line);
-						if (!isCanParse)
+						if (!ParseNumberOfCountry(line, lineNumber))
 							break;
 						/* */
 
@@ -40,7 +40,8 @@ namespace euroRefactoring
 						_countries = new Country[NumberOfCountry];
 						for (int i = 0; i < NumberOfCountry; i++)
 						{
-							_countries[i] = new Country(i);
+							lineNumber++;
+							_countries[i] = new Country(i, lineNumber);
 							_countries[i].Parse(sr.ReadLine()); // читаем строку и сразу ее передаем на парсинг
 						}
 						/* */
@@ -49,6 +50,7 @@ namespace euroRefactoring
 							Calculate();
 
 						PrintOutput();
+						lineNumber++;
 						CaseNumber++;
 					}
 				}
@@ -68,12 +70,7 @@ namespace euroRefactoring
 				{
 					if (!Cities[i].Neighbors.Contains(Cities[j]))
 					{
-						if (((Cities[i].x == Cities[j].x + 1) || (Cities[i].x == Cities[j].x - 1)) && (Cities[i].y == Cities[j].y)) {
-							Cities[i].Neighbors.Add(Cities[j]);
-							Cities[j].Neighbors.Add(Cities[i]);
-						}
-						if (((Cities[i].y == Cities[j].y + 1) || (Cities[i].y == Cities[j].y - 1)) && (Cities[i].x == Cities[j].x))
-						{
+						if ((((Cities[i].x == Cities[j].x + 1) || (Cities[i].x == Cities[j].x - 1)) && (Cities[i].y == Cities[j].y)) || (((Cities[i].y == Cities[j].y + 1) || (Cities[i].y == Cities[j].y - 1)) && (Cities[i].x == Cities[j].x))) {
 							Cities[i].Neighbors.Add(Cities[j]);
 							Cities[j].Neighbors.Add(Cities[i]);
 						}
@@ -131,7 +128,7 @@ namespace euroRefactoring
 
 		/* мои методы (удалить либо перенести в другой файл)*/
 
-		bool ParseNumberOfCountry(string line)
+		bool ParseNumberOfCountry(string line, int lineNumber)
 		{
 			NumberOfCountry = 0;
 
@@ -139,7 +136,7 @@ namespace euroRefactoring
 			bool isCanParse = int.TryParse(line, out NumberOfCountry);
 			if (!isCanParse)
 			{
-				Console.WriteLine("Can't parse number of country");
+				Console.WriteLine($"Can't parse number of country, line: {lineNumber}");
 				return false;
 			}
 			if (NumberOfCountry == 0)
