@@ -18,7 +18,7 @@ namespace euroRefactoring
 		}
 
 		private int countUncompleteCountries;
-		private int countryIndex;
+		public int countryIndex;
 		private const int _initiallyCountCoins = 1000000;
 		private const double _portionCoins = 0.001;
 

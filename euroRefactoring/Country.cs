@@ -4,7 +4,7 @@ namespace euroRefactoring
 {
 	public class Country : IComparable
 	{
-		List<int> сities = new List<int>(); // сдесь индексы городов принадлежащих стране
+		int[] cities; // сдесь индексы городов принадлежащих стране
 		string Name;
 		public bool IsComplete { get; set; }
 
@@ -14,36 +14,43 @@ namespace euroRefactoring
 		int countryIndex;
 		int numberUncompleteCities;
 		int lineNumber;
+		public bool[] Neighbors;
+		public int[] Coordinates = new int[4];
 
 		public Country(int countryIndex, int lineNumber)
 		{
 			this.countryIndex = countryIndex;
 			this.lineNumber = lineNumber;
+			Neighbors = new bool[Diffusion.NumberOfCountry];
 		}
 
 		public void Parse(string contryDefinition) {
-			int[] coordinates = returnCoordinates(contryDefinition); // может заменить на x1 y1 x2 y2 ??????
-			int xLength = Math.Abs(coordinates[2] - coordinates[0]);
-			int yLength = Math.Abs(coordinates[3] - coordinates[1]);
+			int[] Coordinates = returnCoordinates(contryDefinition); // может заменить на x1 y1 x2 y2 ??????
+			int xLength = Math.Abs(Coordinates[2] - Coordinates[0]);
+			int yLength = Math.Abs(Coordinates[3] - Coordinates[1]);
+			int citiesCount = (xLength+1) * (yLength+1);
+			cities = new int[citiesCount];
+			numberUncompleteCities = citiesCount;
 
+			int k = 0;
 			for (int i = 0; i <= xLength; i++)
 			{
 				for (int j = 0; j <= yLength; j++)
 				{
-					Diffusion.Cities.Add(new City(x: coordinates[0] + i, y: coordinates[1] + j, countryIndex));
-					сities.Add(Diffusion.Cities.Count - 1);
+					Diffusion.Cities.Add(new City(x: Coordinates[0] + i, y: Coordinates[1] + j, countryIndex));
+					cities[k] = Diffusion.Cities.Count - 1;
+					k++;
 				}
 			}
-			numberUncompleteCities = сities.Count;
 		}
 
 
 		/* мои функции */
 		public void CheckIsComplete()
 		{
-			for (int i = 0; i < сities.Count; i++)
+			for (int i = 0; i < cities.Length; i++)
 			{
-				if (Diffusion.Cities[сities[i]].IsComplete)
+				if (Diffusion.Cities[cities[i]].IsComplete)
 				{
 					IsComplete = true;
 				} else

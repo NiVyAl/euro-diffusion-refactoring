@@ -44,6 +44,7 @@ namespace euroRefactoring
 							_countries[i] = new Country(i, lineNumber);
 							_countries[i].Parse(sr.ReadLine()); // читаем строку и сразу ее передаем на парсинг
 						}
+						//checkCorrectData();
 						/* */
 
 						if (NumberOfCountry > 1) // calculation starts if the number of countries is > 1 (if only 1 country, it complete in 0 days)
@@ -66,8 +67,11 @@ namespace euroRefactoring
 			/* определяем соседей каждого города */
 			for (int i = 0; i < Cities.Count; i++)
 			{
-				for (int j = 1; j < Cities.Count; j++)
+				for (int j = 0; j < Cities.Count; j++)
 				{
+					if ((i != j) && (Cities[i].x == Cities[j].x) && (Cities[i].y == Cities[j].y))
+						throw new Exception($"Wrong coordinates (country stay at another country), case number: {CaseNumber}, countries: {_countries[Cities[i].countryIndex].CountryName}, {_countries[Cities[j].countryIndex].CountryName}");
+
 					if (!Cities[i].Neighbors.Contains(Cities[j]))
 					{
 						if ((((Cities[i].x == Cities[j].x + 1) || (Cities[i].x == Cities[j].x - 1)) && (Cities[i].y == Cities[j].y)) || (((Cities[i].y == Cities[j].y + 1) || (Cities[i].y == Cities[j].y - 1)) && (Cities[i].x == Cities[j].x))) {
@@ -126,6 +130,7 @@ namespace euroRefactoring
 		}
 
 
+
 		/* мои методы (удалить либо перенести в другой файл)*/
 
 		bool ParseNumberOfCountry(string line, int lineNumber)
@@ -146,5 +151,74 @@ namespace euroRefactoring
 		}
 
 		/* */
+
+		/// <summary>
+		///		check is countries border each other
+		/// </summary>
+		private void checkCorrectData()
+		{
+			/* define the neighbors of each country */
+			for (int i = 0; i < NumberOfCountry; i++)
+			{
+				for (int j = 0; j < NumberOfCountry; j++)
+				{
+					if (_countries[i].Neighbors[j] == true || i == j)
+						continue;
+
+					for (int m = 0; m < 2; m++)
+					{
+						if (_countries[i].Coordinates[m] - 1 == _countries[j].Coordinates[m + 2] || _countries[i].Coordinates[m + 2] + 1 == _countries[j].Coordinates[m]) // check right/left neighbors
+						{
+							int n = m;
+							if (m == 1)
+								n = m - 2;
+							if ((_countries[j].Coordinates[n + 1] >= _countries[i].Coordinates[n + 1] && _countries[j].Coordinates[n + 1] <= _countries[i].Coordinates[n + 3]) || (_countries[j].Coordinates[n + 3] >= _countries[i].Coordinates[n + 1] && _countries[j].Coordinates[n + 3] <= _countries[i].Coordinates[n + 3])) // check top/bottom neighbors
+							{
+								_countries[i].Neighbors[j] = true;
+								_countries[j].Neighbors[i] = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+			/* */
+
+
+			/* define if all countries are connected to each other */
+			bool[] correctCountries = new bool[NumberOfCountry];
+			bool[] queueCheck = new bool[NumberOfCountry];
+			queueCheck[0] = true;
+
+			bool isCanRun = true;
+			while (isCanRun)
+			{
+				isCanRun = false;
+				for (int k = 0; k < NumberOfCountry; k++)
+				{
+					if (queueCheck[k] == true && correctCountries[k] == false)
+					{
+						isCanRun = true;
+						queueCheck[k] = false;
+						correctCountries[k] = true;
+
+						for (int j = 0; j < NumberOfCountry; j++)
+						{
+							if (_countries[k].Neighbors[j])
+							{
+								queueCheck[j] = true;
+							}
+						}
+					}
+				}
+			}
+
+			for (int k = 0; k < NumberOfCountry; k++)
+			{
+				if (correctCountries[k] == false)
+					throw new Exception($"Wrong coordinates, cities don't border (caseNumber: {CaseNumber})");
+			}
+			/* */
+		}
 	}
 }
