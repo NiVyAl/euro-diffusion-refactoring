@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 namespace euroRefactoring
 {
 	public class Country : IComparable
 	{
 		int[] cities; // сдесь индексы городов принадлежащих стране
-		string Name;
+		public string Name;
 		public bool IsComplete { get; set; }
 
 		public string CountryName { get; set; }
@@ -62,23 +61,6 @@ namespace euroRefactoring
 			}
 		}
 
-		public int CompareTo(object obj)
-		{
-			int res;
-			if (obj == null) return 1;
-
-			Country otherCityDays = obj as Country;
-			if (otherCityDays == null)
-				throw new ArgumentException("Object is not a Temperature");
-
-			res = this.Days.CompareTo(otherCityDays.Days);  // sort by number of days
-
-			if (res == 0) // or if number is same
-				res = this.CountryName.CompareTo(otherCityDays.CountryName); // sort alphabetically
-			return res;
-
-		}
-
 		private int[] returnCoordinates(string line)
 		{
 			int coordinatesCount = 4;
@@ -99,6 +81,23 @@ namespace euroRefactoring
 			}
 
 			return coordinates;
+		}
+
+		public int CompareTo(object obj)
+		{
+			int res;
+			if (obj == null) return 1;
+
+			Country otherCityDays = obj as Country;
+			if (otherCityDays == null)
+				throw new ArgumentException("Object is not a Temperature");
+
+			res = this.Days.CompareTo(otherCityDays.Days);  // sort by number of days
+
+			if (res == 0) // or if number is same
+				res = this.CountryName.CompareTo(otherCityDays.CountryName); // sort alphabetically
+			return res;
+
 		}
 	}
 }

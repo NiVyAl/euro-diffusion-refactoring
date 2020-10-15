@@ -5,7 +5,7 @@ namespace euroRefactoring
 {
 	public class City
 	{
-		public int x, y;
+		public int X, Y;
 		public List<City> Neighbors = new List<City>();
 		int[] Balance;
 		int[] Portion;
@@ -24,8 +24,8 @@ namespace euroRefactoring
 
 		public City(int x, int y, int countryIndex)
 		{
-			this.x = x;
-			this.y = y;
+			this.X = x;
+			this.Y = y;
 			this.countryIndex = countryIndex;
 			Balance = new int[Diffusion.NumberOfCountry];
 			Portion = new int[Diffusion.NumberOfCountry];

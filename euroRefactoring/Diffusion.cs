@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace euroRefactoring
 {
 	public class Diffusion
 	{
-		Country[] _countries;
-		bool _IsComplete;
+		Country[] Countries;
 
 		public static int NumberOfCountry; // number of countries in each case
 		public static int CaseNumber = 1;
@@ -37,12 +35,12 @@ namespace euroRefactoring
 						/* */
 
 						/* инициализирую каждую страну */
-						_countries = new Country[NumberOfCountry];
+						Countries = new Country[NumberOfCountry];
 						for (int i = 0; i < NumberOfCountry; i++)
 						{
 							lineNumber++;
-							_countries[i] = new Country(i, lineNumber);
-							_countries[i].Parse(sr.ReadLine()); // читаем строку и сразу ее передаем на парсинг
+							Countries[i] = new Country(i, lineNumber);
+							Countries[i].Parse(sr.ReadLine()); // читаем строку и сразу ее передаем на парсинг
 						}
 						checkCorrectData();
 						/* */
@@ -69,12 +67,12 @@ namespace euroRefactoring
 			{
 				for (int j = 0; j < Cities.Count; j++)
 				{
-					if ((i != j) && (Cities[i].x == Cities[j].x) && (Cities[i].y == Cities[j].y))
-						throw new Exception($"Wrong coordinates (country stay at another country), case number: {CaseNumber}, countries: {_countries[Cities[i].countryIndex].CountryName}, {_countries[Cities[j].countryIndex].CountryName}");
+					if ((i != j) && (Cities[i].X == Cities[j].X) && (Cities[i].Y == Cities[j].Y))
+						throw new Exception($"Wrong coordinates (country stay at another country), case number: {CaseNumber}, countries: {Countries[Cities[i].countryIndex].CountryName}, {Countries[Cities[j].countryIndex].CountryName}");
 
 					if (!Cities[i].Neighbors.Contains(Cities[j]))
 					{
-						if ((((Cities[i].x == Cities[j].x + 1) || (Cities[i].x == Cities[j].x - 1)) && (Cities[i].y == Cities[j].y)) || (((Cities[i].y == Cities[j].y + 1) || (Cities[i].y == Cities[j].y - 1)) && (Cities[i].x == Cities[j].x))) {
+						if ((((Cities[i].X == Cities[j].X + 1) || (Cities[i].X == Cities[j].X - 1)) && (Cities[i].Y == Cities[j].Y)) || (((Cities[i].Y == Cities[j].Y + 1) || (Cities[i].Y == Cities[j].Y - 1)) && (Cities[i].X == Cities[j].X))) {
 							Cities[i].Neighbors.Add(Cities[j]);
 							Cities[j].Neighbors.Add(Cities[i]);
 						}
@@ -99,12 +97,12 @@ namespace euroRefactoring
 
 				for (int i = 0; i < NumberOfCountry; i++)
 				{
-					if (!_countries[i].IsComplete)
+					if (!Countries[i].IsComplete)
 					{
-						_countries[i].CheckIsComplete();
-						if (_countries[i].IsComplete)
+						Countries[i].CheckIsComplete();
+						if (Countries[i].IsComplete)
 						{
-							_countries[i].Days = days;
+							Countries[i].Days = days;
 							numberUncompleteCountries--;
 						}
 					}
@@ -118,7 +116,7 @@ namespace euroRefactoring
 			Console.WriteLine($"Case Number {CaseNumber}");
 
 			var q =
-				from t in _countries
+				from t in Countries
 				orderby t
 				select t;
 
@@ -164,20 +162,20 @@ namespace euroRefactoring
 			{
 				for (int j = 0; j < NumberOfCountry; j++)
 				{
-					if (_countries[i].Neighbors[j] == true || i == j)
+					if (Countries[i].Neighbors[j] == true || i == j)
 						continue;
 
 					for (int m = 0; m < 2; m++)
 					{
-						if (_countries[i].Coordinates[m] - 1 == _countries[j].Coordinates[m + 2] || _countries[i].Coordinates[m + 2] + 1 == _countries[j].Coordinates[m]) // check right/left neighbors
+						if (Countries[i].Coordinates[m] - 1 == Countries[j].Coordinates[m + 2] || Countries[i].Coordinates[m + 2] + 1 == Countries[j].Coordinates[m]) // check right/left neighbors
 						{
 							int n = m;
 							if (m == 1)
 								n = m - 2;
-							if ((_countries[j].Coordinates[n + 1] >= _countries[i].Coordinates[n + 1] && _countries[j].Coordinates[n + 1] <= _countries[i].Coordinates[n + 3]) || (_countries[j].Coordinates[n + 3] >= _countries[i].Coordinates[n + 1] && _countries[j].Coordinates[n + 3] <= _countries[i].Coordinates[n + 3])) // check top/bottom neighbors
+							if ((Countries[j].Coordinates[n + 1] >= Countries[i].Coordinates[n + 1] && Countries[j].Coordinates[n + 1] <= Countries[i].Coordinates[n + 3]) || (Countries[j].Coordinates[n + 3] >= Countries[i].Coordinates[n + 1] && Countries[j].Coordinates[n + 3] <= Countries[i].Coordinates[n + 3])) // check top/bottom neighbors
 							{
-								_countries[i].Neighbors[j] = true;
-								_countries[j].Neighbors[i] = true;
+								Countries[i].Neighbors[j] = true;
+								Countries[j].Neighbors[i] = true;
 								break;
 							}
 						}
@@ -206,7 +204,7 @@ namespace euroRefactoring
 
 						for (int j = 0; j < NumberOfCountry; j++)
 						{
-							if (_countries[k].Neighbors[j])
+							if (Countries[k].Neighbors[j])
 							{
 								queueCheck[j] = true;
 							}
@@ -218,7 +216,7 @@ namespace euroRefactoring
 			for (int k = 0; k < NumberOfCountry; k++)
 			{
 				if (correctCountries[k] == false)
-					throw new Exception($"Wrong coordinates, cities don't border (caseNumber: {CaseNumber}, country: {_countries[k].CountryName})");
+					throw new Exception($"Wrong coordinates, cities don't border (caseNumber: {CaseNumber}, country: {Countries[k].CountryName})");
 			}
 			/* */
 		}
