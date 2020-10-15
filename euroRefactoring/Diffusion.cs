@@ -44,7 +44,7 @@ namespace euroRefactoring
 							_countries[i] = new Country(i, lineNumber);
 							_countries[i].Parse(sr.ReadLine()); // читаем строку и сразу ее передаем на парсинг
 						}
-						//checkCorrectData();
+						checkCorrectData();
 						/* */
 
 						if (NumberOfCountry > 1) // calculation starts if the number of countries is > 1 (if only 1 country, it complete in 0 days)
@@ -131,7 +131,7 @@ namespace euroRefactoring
 
 
 
-		/* мои методы (удалить либо перенести в другой файл)*/
+		/* мои методы (удалить либо хз)*/
 
 		bool ParseNumberOfCountry(string line, int lineNumber)
 		{
@@ -146,6 +146,8 @@ namespace euroRefactoring
 			}
 			if (NumberOfCountry == 0)
 				return false;
+			if ((NumberOfCountry >=20) || (NumberOfCountry < 0))
+				throw new Exception($"number of countries must be (1 < NumberOfCountry < 20), caseNumber: {CaseNumber}");
 			return true;
 			/* */
 		}
@@ -216,7 +218,7 @@ namespace euroRefactoring
 			for (int k = 0; k < NumberOfCountry; k++)
 			{
 				if (correctCountries[k] == false)
-					throw new Exception($"Wrong coordinates, cities don't border (caseNumber: {CaseNumber})");
+					throw new Exception($"Wrong coordinates, cities don't border (caseNumber: {CaseNumber}, country: {_countries[k].CountryName})");
 			}
 			/* */
 		}

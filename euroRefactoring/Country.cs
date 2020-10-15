@@ -25,7 +25,7 @@ namespace euroRefactoring
 		}
 
 		public void Parse(string contryDefinition) {
-			int[] Coordinates = returnCoordinates(contryDefinition); // может заменить на x1 y1 x2 y2 ??????
+			Coordinates = returnCoordinates(contryDefinition); // может заменить на x1 y1 x2 y2 ??????
 			int xLength = Math.Abs(Coordinates[2] - Coordinates[0]);
 			int yLength = Math.Abs(Coordinates[3] - Coordinates[1]);
 			int citiesCount = (xLength+1) * (yLength+1);
@@ -87,6 +87,8 @@ namespace euroRefactoring
 				throw new Exception($"Сountry entered incorrectly, case number: {Diffusion.CaseNumber}, line: {lineNumber}");
 
 			CountryName = words[0].Replace("\t", String.Empty);
+			if (CountryName.Length >= 25)
+				throw new Exception($"Сountry name can be at most 25 characters, case number: {Diffusion.CaseNumber}, line: {lineNumber}");
 			int[] coordinates = new int[coordinatesCount];
 			for (int i = 1; i <= coordinatesCount; i++)
 			{
