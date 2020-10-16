@@ -9,10 +9,10 @@ namespace euroRefactoring
 	{
 		Country[] Countries;
 
-		public static int NumberOfCountry; // number of countries in each case
-		public static int CaseNumber = 1;
+		public int NumberOfCountry; // number of countries in each case
+		public int CaseNumber = 1;
 
-		public static List<City> Cities = new List<City>(); // сдесь все города
+		public List<City> Cities = new List<City>(); // сдесь все города
 
 		public void Parse(string filename)
 		{
@@ -39,7 +39,7 @@ namespace euroRefactoring
 						for (int i = 0; i < NumberOfCountry; i++)
 						{
 							lineNumber++;
-							Countries[i] = new Country(i, lineNumber);
+							Countries[i] = new Country(i, lineNumber, Cities, NumberOfCountry, CaseNumber);
 							Countries[i].Parse(sr.ReadLine()); // читаем строку и сразу ее передаем на парсинг
 						}
 						checkCorrectData();

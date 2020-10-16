@@ -21,23 +21,25 @@ namespace euroRefactoring
 		public int countryIndex;
 		private const int _initiallyCountCoins = 1000000;
 		private const double _portionCoins = 0.001;
+		int NumberOfCountry;
 
-		public City(int x, int y, int countryIndex)
+		public City(int x, int y, int countryIndex, int numberOfCountry)
 		{
 			this.X = x;
 			this.Y = y;
 			this.countryIndex = countryIndex;
-			Balance = new int[Diffusion.NumberOfCountry];
-			Portion = new int[Diffusion.NumberOfCountry];
+			NumberOfCountry = numberOfCountry;
+			Balance = new int[NumberOfCountry];
+			Portion = new int[NumberOfCountry];
 			City[] neighbours = new City[4];
 
-			for (int i = 0; i < Diffusion.NumberOfCountry; i++)
+			for (int i = 0; i < NumberOfCountry; i++)
 			{
 				Balance[i] = 0;
 				Portion[i] = 0;
 			}
 			Balance[countryIndex] = _initiallyCountCoins;
-			countUncompleteCountries = Diffusion.NumberOfCountry-1;
+			countUncompleteCountries = NumberOfCountry-1;
 		}
 
 		public void DayPassed()
@@ -49,14 +51,14 @@ namespace euroRefactoring
 		}
 
 		public void CalculatePortion() {
-			for (int i = 0; i < Diffusion.NumberOfCountry; i++)
+			for (int i = 0; i < NumberOfCountry; i++)
 			{
 				Portion[i] = (int)(Balance[i] * _portionCoins);
 			}
 		}
 
 		public void Transfer(int[] takenCoins) {
-			for (int i = 0; i < Diffusion.NumberOfCountry; i++)
+			for (int i = 0; i < NumberOfCountry; i++)
 			{
 				int startDayCoins = Balance[i];
 				Balance[i] -= Portion[i]; // given coins are deducted
