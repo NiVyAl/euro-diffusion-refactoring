@@ -7,12 +7,10 @@ namespace euroRefactoring
 {
 	public class Diffusion
 	{
+		int NumberOfCountry; // number of countries in each case
+		int CaseNumber = 1;
+		List<City> Cities = new List<City>(); // сдесь все города
 		Country[] Countries;
-
-		public int NumberOfCountry; // number of countries in each case
-		public int CaseNumber = 1;
-
-		public List<City> Cities = new List<City>(); // сдесь все города
 
 		public void Parse(string filename)
 		{
@@ -28,19 +26,17 @@ namespace euroRefactoring
 					int lineNumber = 1;
 					while ((line = sr.ReadLine()) != null)
 					{
-						Cities.Clear();
-						/* получаю количество стран */
-						if (!ParseNumberOfCountry(line, lineNumber))
+						if (!TryParseNumberOfCountry(line, lineNumber))
 							break;
-						/* */
 
-						/* инициализирую каждую страну */
+						/* Initialize countries */
+						Cities.Clear();
 						Countries = new Country[NumberOfCountry];
 						for (int i = 0; i < NumberOfCountry; i++)
 						{
 							lineNumber++;
 							Countries[i] = new Country(i, lineNumber, Cities, NumberOfCountry, CaseNumber);
-							Countries[i].Parse(sr.ReadLine()); // читаем строку и сразу ее передаем на парсинг
+							Countries[i].Parse(sr.ReadLine());
 						}
 						checkCorrectData();
 						/* */
@@ -62,13 +58,13 @@ namespace euroRefactoring
 
 		void Calculate()
 		{
-			/* определяем соседей каждого города */
+			/* Define neighbors to each city */
 			for (int i = 0; i < Cities.Count; i++)
 			{
 				for (int j = 0; j < Cities.Count; j++)
 				{
 					if ((i != j) && (Cities[i].X == Cities[j].X) && (Cities[i].Y == Cities[j].Y))
-						throw new Exception($"Wrong coordinates (country stay at another country), case number: {CaseNumber}, countries: {Countries[Cities[i].countryIndex].CountryName}, {Countries[Cities[j].countryIndex].CountryName}");
+						throw new Exception($"Wrong coordinates (country stay at another country), case number: {CaseNumber}, countries: {Countries[Cities[i].CountryIndex].CountryName}, {Countries[Cities[j].CountryIndex].CountryName}");
 
 					if (!Cities[i].Neighbors.Contains(Cities[j]))
 					{
@@ -127,30 +123,20 @@ namespace euroRefactoring
 			}
 		}
 
-
-
-		/* мои методы (удалить либо хз)*/
-
-		bool ParseNumberOfCountry(string line, int lineNumber)
+		bool TryParseNumberOfCountry(string line, int lineNumber)
 		{
 			NumberOfCountry = 0;
 
-			/* parse number of country */
 			bool isCanParse = int.TryParse(line, out NumberOfCountry);
 			if (!isCanParse)
-			{
-				Console.WriteLine($"Can't parse number of country, line: {lineNumber}");
-				return false;
-			}
+				throw new Exception($"Can't parse number of country, line: {lineNumber}");
 			if (NumberOfCountry == 0)
 				return false;
 			if ((NumberOfCountry >=20) || (NumberOfCountry < 0))
 				throw new Exception($"number of countries must be (1 < NumberOfCountry < 20), caseNumber: {CaseNumber}");
-			return true;
-			/* */
-		}
 
-		/* */
+			return true;
+		}
 
 		/// <summary>
 		///		check is countries border each other
@@ -183,7 +169,6 @@ namespace euroRefactoring
 				}
 			}
 			/* */
-
 
 			/* define if all countries are connected to each other */
 			bool[] correctCountries = new bool[NumberOfCountry];
