@@ -13,7 +13,7 @@ namespace euroRefactoring
 		int[] Portion;
 
 		public int X, Y;
-		public List<City> Neighbors = new List<City>(); // ???может лучше массив из 4 элементов???
+		public List<City> Neighbors = new List<City>();
 		public int CountryIndex;
 		public bool IsComplete
 		{

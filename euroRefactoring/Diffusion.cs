@@ -9,7 +9,7 @@ namespace euroRefactoring
 	{
 		int NumberOfCountry; // number of countries in each case
 		int CaseNumber = 1;
-		List<City> Cities = new List<City>(); // сдесь все города
+		List<City> Cities = new List<City>(); // все города
 		Country[] Countries;
 
 		public void Parse(string filename)
@@ -82,14 +82,8 @@ namespace euroRefactoring
 
 			while (numberUncompleteCountries > 0)
 			{
-				for (int i = 0; i < Cities.Count; i++)
-				{
-					Cities[i].CalculatePortion();
-				}
-				for (int i = 0; i < Cities.Count; i++)
-				{
-					Cities[i].DayPassed();
-				}
+				Cities.ForEach(a => a.CalculatePortion());
+				Cities.ForEach(a => a.DayPassed());
 
 				for (int i = 0; i < NumberOfCountry; i++)
 				{

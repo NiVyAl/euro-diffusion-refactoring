@@ -21,10 +21,10 @@ namespace euroRefactoring
 		{
 			СountryIndex = countryIndex;
 			LineNumber = lineNumber;
-			Neighbors = new bool[numberOfCountry];
+			NumberOfCountry = numberOfCountry;
+			Neighbors = new bool[NumberOfCountry];
 			AllCities = allCities;
 			CaseNumber = caseNumber;
-			NumberOfCountry = numberOfCountry;
 		}
 
 		/// <summary>
