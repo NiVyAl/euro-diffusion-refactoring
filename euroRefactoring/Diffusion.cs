@@ -9,6 +9,7 @@ namespace euroRefactoring
 	{
 		int NumberOfCountry; // number of countries in each case
 		int CaseNumber = 1;
+		bool IsComplete = false;
 		List<City> Cities = new List<City>(); // all cities
 		Country[] Countries;
 
@@ -22,7 +23,8 @@ namespace euroRefactoring
 					int lineNumber = 1;
 					while ((line = sr.ReadLine()) != null)
 					{
-						if (!TryParseNumberOfCountry(line, lineNumber))
+						ParseNumberOfCountry(line, lineNumber);
+						if (IsComplete)
 							break;
 
 						/* Initialize countries */
@@ -60,7 +62,7 @@ namespace euroRefactoring
 				for (int j = 0; j < Cities.Count; j++)
 				{
 					if ((i != j) && (Cities[i].X == Cities[j].X) && (Cities[i].Y == Cities[j].Y))
-						throw new Exception($"Wrong coordinates (country stay at another country), case number: {CaseNumber}, countries: {Countries[Cities[i].CountryIndex].CountryName}, {Countries[Cities[j].CountryIndex].CountryName}");
+						throw new Exception($"Wrong coordinates (country stay at another country), case number: {CaseNumber}, countries: {Countries[Cities[i].CountryIndex].Name}, {Countries[Cities[j].CountryIndex].Name}");
 
 					if (!Cities[i].Neighbors.Contains(Cities[j]))
 					{
@@ -109,11 +111,11 @@ namespace euroRefactoring
 			var result = q.ToList();
 			foreach (Country i in result)
 			{
-				Console.WriteLine($"	{i.CountryName}: {i.Days}");
+				Console.WriteLine($"	{i.Name}: {i.Days}");
 			}
 		}
 
-		bool TryParseNumberOfCountry(string line, int lineNumber)
+		void ParseNumberOfCountry(string line, int lineNumber)
 		{
 			NumberOfCountry = 0;
 
@@ -121,11 +123,9 @@ namespace euroRefactoring
 			if (!isCanParse)
 				throw new Exception($"Can't parse number of country, line: {lineNumber}");
 			if (NumberOfCountry == 0)
-				return false;
+				IsComplete = true;
 			if ((NumberOfCountry >=20) || (NumberOfCountry < 0))
 				throw new Exception($"number of countries must be (1 < NumberOfCountry < 20), caseNumber: {CaseNumber}");
-
-			return true;
 		}
 
 		/// <summary>
@@ -191,7 +191,7 @@ namespace euroRefactoring
 			for (int k = 0; k < NumberOfCountry; k++)
 			{
 				if (correctCountries[k] == false)
-					throw new Exception($"Wrong coordinates, cities don't border (caseNumber: {CaseNumber}, country: {Countries[k].CountryName})");
+					throw new Exception($"Wrong coordinates, cities don't border (caseNumber: {CaseNumber}, country: {Countries[k].Name})");
 			}
 			/* */
 		}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 namespace euroRefactoring
 {
 	public class Country : IComparable
@@ -12,7 +13,7 @@ namespace euroRefactoring
 		int LineNumber;
 
 		public bool IsComplete { get; set; }
-		public string CountryName { get; set; }
+		public string Name { get; set; }
 		public int Days { get; set; }
 		public bool[] Neighbors;
 		public int[] Coordinates = new int[4];
@@ -35,15 +36,15 @@ namespace euroRefactoring
 			string[] words = contryDefinition.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 			if (words.Length != 5)
 				throw new Exception($"Сountry entered incorrectly, case number: {CaseNumber}, line: {LineNumber}");
-			CountryName = words[0].Replace("\t", String.Empty);
-			if (CountryName.Length >= 25)
+			Name = words[0].Replace("\t", String.Empty);
+			if (Name.Length >= 25)
 				throw new Exception($"Сountry name can be at most 25 characters, case number: {CaseNumber}, line: {LineNumber}");
 
 			for (int i = 1; i <= Coordinates.Length; i++)
 			{
 				if (int.TryParse(words[i], out Coordinates[i - 1]) == false)
 				{
-					throw new Exception($"Can't parse coordinates, case number: {CaseNumber}, country name: {CountryName}, line: {LineNumber}");
+					throw new Exception($"Can't parse coordinates, case number: {CaseNumber}, country name: {Name}, line: {LineNumber}");
 				}
 			}
 
@@ -97,7 +98,7 @@ namespace euroRefactoring
 			res = this.Days.CompareTo(otherCityDays.Days);  // sort by number of days
 
 			if (res == 0) // or if number is same
-				res = this.CountryName.CompareTo(otherCityDays.CountryName); // sort alphabetically
+				res = this.Name.CompareTo(otherCityDays.Name); // sort alphabetically
 			return res;
 
 		}
