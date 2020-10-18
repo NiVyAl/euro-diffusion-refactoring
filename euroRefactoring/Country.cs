@@ -4,11 +4,11 @@ namespace euroRefactoring
 {
 	public class Country : IComparable
 	{
-		int[] Сities; // сдесь индексы городов принадлежащих стране
-		int NumberOfCountry; // ???используется только для передачи городу, может как то его можно передать на сквозь сразу city???
+		int[] Сities; // index of cities in this country
+		int NumberOfCountry;
 		int CaseNumber;
-		List<City> AllCities; // города всех стран, передается в конструкторе как параметр
-		int СountryIndex; // номер страны по списку, тоже из контруктора
+		List<City> AllCities; // all cities
+		int СountryIndex;
 		int LineNumber;
 
 		public bool IsComplete { get; set; }
@@ -50,8 +50,6 @@ namespace euroRefactoring
 			InitializeCities();
 		}
 
-
-		/* мои функции */
 		private void InitializeCities()
 		{
 			int xLength = Math.Abs(Coordinates[2] - Coordinates[0]);

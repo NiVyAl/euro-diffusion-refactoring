@@ -9,7 +9,7 @@ namespace euroRefactoring
 	{
 		int NumberOfCountry; // number of countries in each case
 		int CaseNumber = 1;
-		List<City> Cities = new List<City>(); // все города
+		List<City> Cities = new List<City>(); // all cities
 		Country[] Countries;
 
 		public void Parse(string filename)
@@ -18,10 +18,6 @@ namespace euroRefactoring
 			{
 				using (StreamReader sr = new StreamReader(filename, System.Text.Encoding.Default))
 				{
-					Console.WriteLine();
-					Console.WriteLine();
-					Console.WriteLine();
-					Console.WriteLine("Start............");
 					string line;
 					int lineNumber = 1;
 					while ((line = sr.ReadLine()) != null)

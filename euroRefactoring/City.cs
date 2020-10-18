@@ -41,6 +41,9 @@ namespace euroRefactoring
 			CountUncompleteCountries = NumberOfCountry-1;
 		}
 
+		/// <summary>
+		///		City transfer coins to its neighbors
+		/// </summary>
 		public void DayPassed()
 		{
 			for (int i = 0; i < Neighbors.Count; i++)
